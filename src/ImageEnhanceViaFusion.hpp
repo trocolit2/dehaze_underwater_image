@@ -5,14 +5,9 @@
 
 namespace dehaze_undewater_image {
 
-class ImageEnhanceViaFusion {
+cv::Mat colorBalance(cv::Mat image, float percent = 0.05);
+cv::Mat colorBalance(cv::Mat image, const cv::Scalar& percent_channel);
 
-public:
-  static cv::Mat apply(cv::Mat image);
-  static cv::Mat colorBalance(cv::Mat image, float percent = 0.05);
-
-
-};
 
 } // end namespace dehaze_undewater_image
 

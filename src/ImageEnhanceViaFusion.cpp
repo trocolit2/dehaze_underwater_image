@@ -10,22 +10,9 @@
 
 namespace dehaze_undewater_image {
 
-cv::Mat ImageEnhanceViaFusion::apply(cv::Mat image){
 
-
-  return cv::Mat1b::zeros(500,500);
-}
-
-
-// percent should have values between 0.01 and 0.99
-cv::Mat ImageEnhanceViaFusion::colorBalance(cv::Mat image, float percent){
-  if (percent <= 0)
-    percent = 0.001;
-  else if( percent >= 1)
-    percent = 0.99;
-
-  int rows = image.rows;
-  int cols = image.rows;
+// percent should have values between 0.0001 and 0.05
+cv::Mat colorBalance( cv::Mat image, const cv::Scalar& percent_channel ){
 
   std::vector<cv::Mat> channels;
   if(image.channels() == 3)
@@ -35,21 +22,14 @@ cv::Mat ImageEnhanceViaFusion::colorBalance(cv::Mat image, float percent){
 
   for (size_t j = 0; j < channels.size(); j++) {
     cv::Mat flat = channels[j].reshape(1, 1).clone();
-    // std::cout << " flat " << flat << std::endl;
-    // std::cout << " flat SIZE " << flat.size() << std::endl;
     cv::sort(flat, flat, CV_SORT_ASCENDING);
-    // std::cout << " sort flat " << flat << std::endl;
 
-    int low_position = (int) flat.cols * percent;
+    int low_position = (int) flat.cols * percent_channel[j];
     uchar low_value = flat.at<uchar>( 0, low_position);
     uchar top_value = flat.at<uchar>( 0, flat.cols - low_position );
 
-    // std::cout << " LOW | TOP " << (int) low_value
-    //                            << "| "
-    //                            << (int) top_value << std::endl;
-
-    for (size_t m = 0; m < rows; m++)
-      for (size_t n = 0; n < cols; n++) {
+    for (size_t m = 0; m < channels[j].rows; m++)
+      for (size_t n = 0; n < channels[j].cols; n++) {
         if( channels[j].at<uchar>(m, n) < low_value )
           channels[j].at<uchar>(m, n) = low_value;
         else if( channels[j].at<uchar>(m, n) > top_value )
@@ -65,6 +45,11 @@ cv::Mat ImageEnhanceViaFusion::colorBalance(cv::Mat image, float percent){
     image = channels[0];
 
   return image;
+}
+
+cv::Mat colorBalance(cv::Mat image, float percent){
+  cv::Scalar percent_channel(percent, percent, percent, 0);
+  return colorBalance(image, percent_channel);
 }
 
 }
