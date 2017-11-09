@@ -65,7 +65,6 @@ BOOST_AUTO_TEST_CASE(colorBalanceByChannel_testcase) {
     cv::cvtColor(img, img, CV_BGR2HSV);
     cv::split(img, channels);
     clahe->apply(channels[2], channels[2]);
-    // cv::equalizeHist(channels[2], channels[2]);
     cv::merge(channels, img);
     cv::cvtColor(img, img, CV_HSV2BGR);
 
