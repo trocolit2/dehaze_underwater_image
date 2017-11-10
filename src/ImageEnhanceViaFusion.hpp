@@ -8,12 +8,12 @@ namespace dehaze_undewater_image {
 cv::Mat colorBalance(cv::Mat image, float percent = 0.05);
 cv::Mat colorBalance(cv::Mat image, const cv::Scalar& percent_channel);
 
-class AdaptativeColorBalance {
+class AdaptiveColorBalance {
 
 public:
-  AdaptativeColorBalance();
-  AdaptativeColorBalance(cv::Scalar intial_low_value,
-                         cv::Scalar intial_top_value);
+  AdaptiveColorBalance();
+  AdaptiveColorBalance(cv::Scalar intial_low_value,
+                       cv::Scalar intial_top_value);
 
   cv::Mat apply(cv::Mat image,
                 float clip_value = 0.01,

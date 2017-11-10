@@ -52,12 +52,12 @@ cv::Mat colorBalance(cv::Mat image, float percent){
   return colorBalance(image, percent_channel);
 }
 
-AdaptativeColorBalance::AdaptativeColorBalance()
+AdaptiveColorBalance::AdaptiveColorBalance()
   : low_values_(cv::Scalar(128, 128, 128))
   , top_values_(cv::Scalar(128, 128, 128)){
 }
 
-AdaptativeColorBalance::AdaptativeColorBalance(
+AdaptiveColorBalance::AdaptiveColorBalance(
                                     cv::Scalar intial_low_value,
                                     cv::Scalar intial_top_value)
   : low_values_(cv::Scalar( intial_low_value[0],
@@ -69,7 +69,7 @@ AdaptativeColorBalance::AdaptativeColorBalance(
 }
 
 
-cv::Mat AdaptativeColorBalance::apply(  cv::Mat image,
+cv::Mat AdaptiveColorBalance::apply(  cv::Mat image,
                                         float clip_value,
                                         float learn_rate){
 
