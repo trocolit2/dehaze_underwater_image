@@ -73,3 +73,25 @@ BOOST_AUTO_TEST_CASE(colorBalanceByChannel_testcase) {
     cv::waitKey();
   }
 }
+
+BOOST_AUTO_TEST_CASE(AdaptiveColorBalance_testcase) {
+
+  std::string path_daset(PATH_DATASET);
+  std::string file_name = "video_00.avi";
+
+  std::cout << "DATASET PATH " << path_daset + file_name << std::endl;
+  cv::VideoCapture capture(path_daset + file_name);
+
+  AdaptiveColorBalance color_balance(cv::Scalar(40, 53, 10),
+                                       cv::Scalar(187, 240, 60));
+  while(capture.grab()){
+
+    cv::Mat img;
+    capture.retrieve(img);
+    cv::imshow("out original" , img);
+    img = color_balance.apply(img, 0.01, 0.01);
+    cv::imshow("out colorBalance " , img);
+
+    cv::waitKey(30);
+  }
+}
