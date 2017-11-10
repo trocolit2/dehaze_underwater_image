@@ -52,4 +52,79 @@ cv::Mat colorBalance(cv::Mat image, float percent){
   return colorBalance(image, percent_channel);
 }
 
+AdaptativeColorBalance::AdaptativeColorBalance()
+  : low_values_(cv::Scalar(128, 128, 128))
+  , top_values_(cv::Scalar(128, 128, 128)){
 }
+
+AdaptativeColorBalance::AdaptativeColorBalance(
+                                    cv::Scalar intial_low_value,
+                                    cv::Scalar intial_top_value)
+  : low_values_(cv::Scalar( intial_low_value[0],
+                            intial_low_value[1],
+                            intial_low_value[2]))
+  , top_values_(cv::Scalar( intial_top_value[0],
+                            intial_top_value[1],
+                            intial_top_value[2])){
+}
+
+
+cv::Mat AdaptativeColorBalance::apply(  cv::Mat image,
+                                        float clip_value,
+                                        float learn_rate){
+
+  std::vector<cv::Mat> channels;
+  if(image.channels() == 3)
+    cv::split(image, channels);
+  else
+    channels.push_back(image);
+
+  // std::cout << "\nVALUES " << std::endl;
+
+  for (size_t j = 0; j < channels.size(); j++) {
+    cv::Mat flat = channels[j].reshape(1, 1).clone();
+    cv::sort(flat, flat, CV_SORT_ASCENDING);
+
+    int low_position = (int) flat.cols * clip_value;
+    float low_value = (float) flat.at<uchar>( 0, low_position);
+    float top_value = (float) flat.at<uchar>( 0, flat.cols - low_position );
+
+    // std::cout << "LOW | TOP " << low_value << " | " << top_value << std::endl;
+
+    float low_diff = low_value - low_values_[j];
+    if(low_diff){
+      if( low_diff < 0 )
+        low_values_[j] -= learn_rate;
+      else
+        low_values_[j] += learn_rate;
+    }
+
+    float top_diff = top_value - top_values_[j];
+    if(top_diff){
+      if( top_diff < 0 )
+        top_values_[j] -= learn_rate;
+      else
+        top_values_[j] += learn_rate;
+    }
+
+    for (int m = 0; m < channels[j].rows; m++)
+      for (int n = 0; n < channels[j].cols; n++) {
+        if( channels[j].at<uchar>(m, n) < (uchar) low_values_[j] )
+          channels[j].at<uchar>(m, n) = (uchar) low_values_[j];
+        else if( channels[j].at<uchar>(m, n) > (uchar) top_values_[j] )
+          channels[j].at<uchar>(m, n) = (uchar) top_values_[j];
+      }
+
+    cv::normalize(channels[j], channels[j], 0, 255, cv::NORM_MINMAX);
+  }
+
+  if(image.channels() == 3)
+    cv::merge(channels, image);
+  else
+    image = channels[0];
+
+  return image;
+}
+
+
+} // end namespace dehaze_undewater_image
