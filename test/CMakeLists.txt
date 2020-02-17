@@ -2,7 +2,7 @@
 ## TEST MAIN CMAKE ##
 #####################
 
-find_package(OpenCV  REQUIRED)
+find_package(OpenCV REQUIRED)
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 include_directories (${Boost_INCLUDE_DIRS})
 set(SOURCE_LIBS ${SOURCE_LIBS} )
