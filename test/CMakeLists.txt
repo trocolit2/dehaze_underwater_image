@@ -2,7 +2,10 @@
 ## TEST MAIN CMAKE ##
 #####################
 
-find_package(OpenCV REQUIRED)
+set(CMAKE_CXX_STANDARD 11)
+
+find_package(OpenCV  REQUIRED)
+
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 include_directories (${Boost_INCLUDE_DIRS})
 set(SOURCE_LIBS ${SOURCE_LIBS} )
@@ -39,3 +42,5 @@ foreach(testSrc ${TEST_FILES})
                 WORKING_DIRECTORY ${bin_path}/testbin
                 COMMAND ${bin_path}/testbin/${testName})
 endforeach(testSrc)
+
+
