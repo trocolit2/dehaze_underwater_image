@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(dehaze_undewater_image)
+project(dehaze_underwater_image)
 
 ######################
 ## PROJECT SETTINGS ##
@@ -28,6 +28,16 @@ add_subdirectory(${source_path})
 ###################
 enable_testing()
 add_subdirectory(${test_path})
+
+file( COPY ${source_dir} dataset
+    DESTINATION ${bin_path}
+)
+
+configure_file(cmake/dehaze_underwater_image-config.cmake.in 
+dehaze_underwater_image-config.cmake @ONLY)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/dehaze_underwater_image-config.cmake
+DESTINATION share/dehaze_underwater_image/cmake)
 
 # ######################
 # ## SAMPLE MAIN PATH ##

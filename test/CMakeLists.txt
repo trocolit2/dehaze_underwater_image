@@ -39,3 +39,5 @@ foreach(testSrc ${TEST_FILES})
                 WORKING_DIRECTORY ${bin_path}/testbin
                 COMMAND ${bin_path}/testbin/${testName})
 endforeach(testSrc)
+
+

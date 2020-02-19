@@ -1,0 +1,17 @@
+find_package(OpenCV REQUIRED)
+
+find_library(dehaze_underwater_image_LIBRARY dehaze_methods
+    PATHS "@CMAKE_INSTALL_PREFIX@/lib"
+)
+
+list(APPEND dehaze_underwater_image_INCLUDE_DIR
+  @CMAKE_INSTALL_PREFIX@/include
+  ${OpenCV_INCLUDE_DIRS} )
+
+list(APPEND dehaze_underwater_image_LIBRARY
+    ${OpenCV_DIRS} )
+
+set(dehaze_underwater_image_LIBRARIES ${dehaze_underwater_image_LIBRARY} 
+    )
+set(dehaze_underwater_image_LIBS ${dehaze_underwater_image_LIBRARY})
+set(dehaze_underwater_image_INCLUDE_DIRS ${dehaze_underwater_image_INCLUDE_DIR})
